@@ -92,7 +92,7 @@ namespace Moneybox.App.Tests.Features
             Guid fromAccountId =  Guid.NewGuid();
             Guid toAccountId = Guid.NewGuid();
             decimal fromAccountBalance = Account.LowFundsThreshold + transferAmount;
-            decimal toPayIntotal = 3000;
+            decimal toAccountTotalPaidIn = Account.PayInLimit - Account.LowFundsThreshold - transferAmount;
 
             var fromAccount = Account.Create(
                _fromAccountId,
@@ -112,7 +112,7 @@ namespace Moneybox.App.Tests.Features
                 },
                 _toAccountBalance,
                 _toAccountTotalWithdrawn,
-                toPayIntotal);
+                toAccountTotalPaidIn);
 
             _mockAccountRepository
                .Setup(r => r.GetAccountById(fromAccountId))
@@ -139,6 +139,8 @@ namespace Moneybox.App.Tests.Features
             const decimal transferAmount = 200m;
             Guid fromAccountId = Guid.NewGuid();
             Guid toAccountId = Guid.NewGuid();
+            decimal fromAccountBalance = Account.LowFundsThreshold + transferAmount - 1;
+            decimal toAccountTotalPaidIn = Account.PayInLimit - Account.LowFundsThreshold - transferAmount;
 
             var fromAccount = Account.Create(
                _fromAccountId,
@@ -146,7 +148,7 @@ namespace Moneybox.App.Tests.Features
                {
                    Email = _fromAccountEmail
                },
-               transferAmount,
+               fromAccountBalance,
                _fromAccountTotalWithdrawn,
                _fromAccountTotalPaidIn);
 
@@ -158,7 +160,7 @@ namespace Moneybox.App.Tests.Features
                 },
                 _toAccountBalance,
                 _toAccountTotalWithdrawn,
-                _toAccountTotalPaidIn);
+                toAccountTotalPaidIn);
 
             _mockAccountRepository
                .Setup(r => r.GetAccountById(fromAccountId))
@@ -186,7 +188,7 @@ namespace Moneybox.App.Tests.Features
             Guid fromAccountId = Guid.NewGuid();
             Guid toAccountId = Guid.NewGuid();
             decimal fromAccountBalance = Account.LowFundsThreshold + transferAmount;
-            decimal toPayInTotal = 10;
+            decimal toAccountTotalPaidIn = Account.PayInLimit - Account.LowFundsThreshold - transferAmount + 1;
 
             var fromAccount = Account.Create(
                _fromAccountId,
@@ -206,7 +208,7 @@ namespace Moneybox.App.Tests.Features
                 },
                 _toAccountBalance,
                 _toAccountTotalWithdrawn,
-                toPayInTotal);
+                toAccountTotalPaidIn);
 
             _mockAccountRepository
                .Setup(r => r.GetAccountById(fromAccountId))
@@ -233,7 +235,8 @@ namespace Moneybox.App.Tests.Features
             const decimal transferAmount = 3600m;
             Guid fromAccountId = Guid.NewGuid();
             Guid toAccountId = Guid.NewGuid();
-            decimal toAccountBalance = Account.LowFundsThreshold + transferAmount - 10;
+            decimal fromAccountBalance = Account.LowFundsThreshold + transferAmount - 1;
+            decimal toAccountTotalPaidIn = Account.PayInLimit - Account.LowFundsThreshold - transferAmount + 1;
 
             var fromAccount = Account.Create(
                _fromAccountId,
@@ -241,7 +244,7 @@ namespace Moneybox.App.Tests.Features
                {
                    Email = _fromAccountEmail
                },
-               transferAmount,
+               fromAccountBalance,
                _fromAccountTotalWithdrawn,
                _fromAccountTotalPaidIn);
 
@@ -251,9 +254,9 @@ namespace Moneybox.App.Tests.Features
                 {
                     Email = _toAccountemail
                 },
-                toAccountBalance,
+                _toAccountBalance,
                 _toAccountTotalWithdrawn,
-                _toAccountTotalPaidIn);
+                toAccountTotalPaidIn);
 
             _mockAccountRepository
                .Setup(r => r.GetAccountById(fromAccountId))
