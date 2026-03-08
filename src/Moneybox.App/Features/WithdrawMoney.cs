@@ -17,7 +17,25 @@ namespace Moneybox.App.Features
 
         public void Execute(Guid fromAccountId, decimal amount)
         {
-            // TODO:
+            var from = this.accountRepository.GetAccountById(fromAccountId);
+
+            from.WithdrawFunds(amount);
+
+            this.accountRepository.Update(from);
+
+            NotifyIfRequired(from);
+        }
+
+        /// <summary>
+        /// Notifies the account holder if their balance has fallen below the low funds threshold.
+        /// </summary>
+        /// <param name="from"></param>
+        private void NotifyIfRequired(Account from)
+        {
+            if (from.IsLowFunds)
+            {
+                this.notificationService.NotifyFundsLow(from.User.Email);
+            }
         }
     }
 }
