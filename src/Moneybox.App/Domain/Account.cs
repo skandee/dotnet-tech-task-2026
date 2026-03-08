@@ -8,15 +8,17 @@ namespace Moneybox.App
         public const decimal PayInLimit = 4000m;
         public const decimal LowFundsThreshold = 500m;
 
-        public Guid Id { get; set; }
+        public Guid Id { get; private set; }
 
-        public User User { get; set; }
+        public User User { get; private set; }
 
-        public decimal Balance { get; set; }
+        public decimal Balance { get; private set; }
 
-        public decimal Withdrawn { get; set; }
+        public decimal Withdrawn { get; private set; }
 
-        public decimal PaidIn { get; set; }
+        public decimal PaidIn { get; private set; }
+
+        private Account() { }
 
         public bool IsLowFunds => Balance < LowFundsThreshold;
 
@@ -63,6 +65,32 @@ namespace Moneybox.App
 
             Balance += amount;
             PaidIn += amount;
+        }
+                    
+
+        /// <summary>
+        /// Factory method to create a new Account instance.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="user"></param>
+        /// <param name="balance"></param>
+        /// <param name="withdrawn"></param>
+        /// <param name="paidIn"></param>
+        /// <returns></returns>
+        public static Account Create(Guid id,
+            User user,
+            decimal balance,
+            decimal withdrawn,
+            decimal paidIn)
+        {
+            return new Account
+            {
+                Id = id,
+                User = user,
+                Balance = balance,
+                Withdrawn = withdrawn,
+                PaidIn = paidIn
+            };
         }
     }
 }
