@@ -25,3 +25,18 @@ As part of this process however, you should look to refactor some of the code in
 Once you have completed test, zip up your solution, excluding any build artifacts to reduce the size, and email it back to our recruitment team.
 
 Good luck!
+
+## Technical Changes and Refactoring
+### Refactoring TransferMoney
+- Moved balance validation and pay-in logic into the Account class so that business rules are encapsulated within the domain model
+- Made all Account properties use 'private set' to prevent external mutation
+- Added a Create() factory method to the Account class to ensure all required properties are provided at creation, guaranteeing the account object is always initialised in a valid state
+- Added a private empty constructor to prevent the Account object from being created in an invalid state
+- Added custom domain exceptions (InsufficientFundsException, InvalidAmountException, PayInLimitExceededException) so that each exception clearly describes what went wrong, instead of relying on generic exceptions
+- Added input validation that throws descriptive exceptions when invalid inputs are provided
+
+### WithdrawMoney
+- Implemented 'WithdrawMoney.Execute()' following the same pattern as 'TransferMoney.Execute()'
+
+### Testing
+- Added unit tests for Account, TransferMoney and WithdrawMoney using NUnit and Moq
